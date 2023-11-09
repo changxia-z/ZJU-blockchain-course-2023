@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "web3": "^4.2.1"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.0"
+  }
+}
