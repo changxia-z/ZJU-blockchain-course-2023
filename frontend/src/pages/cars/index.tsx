@@ -153,9 +153,9 @@ const CarPages = () => {
     <div>
       <Space direction={"vertical"} style={{display: 'flex', padding: '15px'}}>
         <Flex justify={"flex-end"}>
-          {isClaimed ?
-            (<Button>You have {parseInt(myJJC).toString()} JJC</Button>) :
-            (<Button onClick={getAirdrop}>Get JJC Airdrop</Button>)}
+          {(account!=='' && ((isClaimed) ?
+                    (<Button>You have {parseInt(myJJC).toString()} JJC</Button>) :
+                    (<Button onClick={getAirdrop}>Get JJC Airdrop</Button>)))}
         </Flex>
         <Flex align={"flex-end"} gap={"small"}>
           <Search placeholder={"search car Token Id"} allowClear onSearch={onSearch} enterButton/>
