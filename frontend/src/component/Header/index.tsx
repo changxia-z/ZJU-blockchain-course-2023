@@ -1,15 +1,17 @@
 import  {web3, borrowYourCarContract} from "../../utils/Web3"
 import React, {useEffect, useState} from "react";
-import {Button, Flex, List, Modal, Popover, Image} from "antd";
+import {Button, Flex, List, Modal, Popover, Image, Space} from "antd";
 import {Uint256} from "web3/lib/types";
+import {Address} from "web3";
 const GanacheTestChainId = '0x539'; // Ganache默认的ChainId = 0x539 = Hex(1337)
 const GanacheTestChainName = 'Ganache Test Chain';
 const GanacheTestChainRpcUrl = 'http://127.0.0.1:8545';
+
 const Header = () =>{
   interface Car {
     carTokenId: Uint256;
-    owner : string;
-    borrower: string;
+    owner : Address;
+    borrower: Address;
     borrowUntil : Uint256;
   }
   const [account, setAccount] = useState('');
@@ -32,7 +34,7 @@ const Header = () =>{
       }
     }
     initCheckAccounts();
-  }, []);
+  },[]);
   const onClickConnectWallet = async () => {
     // 查看window对象里是否存在ethereum（metamask安装后注入的）对象
     // @ts-ignore
@@ -121,11 +123,13 @@ const Header = () =>{
           Borrow Your Car
         </div>
         <div className="userProfile">
-          {isConnect ?
-            (<Popover content={content} title={account}>
-              <Button type="primary">user: {account}</Button>
-            </Popover>) :
-            (<Button onClick={onClickConnectWallet}>Connect Wallet</Button>)}
+          <Space direction={"horizontal"}>
+            {isConnect ?
+              (<Popover content={content} title={account}>
+                <Button type="primary">user: {account}</Button>
+              </Popover>) :
+              (<Button onClick={onClickConnectWallet}>Connect Wallet</Button>)}
+          </Space>
         </div>
       </header>
       <Modal title="My Cars" open={isModalOpen} onOk={handleOk} onCancel={() => {setIsModalOpen(false);}}>

@@ -7,13 +7,14 @@ pragma solidity ^0.8.20;
 
 // Uncomment this line to use console.log
 import "hardhat/console.sol";
-
+import "./MyERC20.sol";
 contract BorrowYourCar{
 
     // use a event if you want
     // to represent time you can choose block.timestamp
     event CarBorrowed(uint256 carTokenId, address borrower, uint256 startTime, uint256 duration);
     event CarRent(uint carTokenId, address owner);
+    MyERC20 public myERC20;
     // maybe you need a struct to store car information
     struct Car {
         address owner;
@@ -31,9 +32,9 @@ contract BorrowYourCar{
     uint256 private curCar;
     constructor(){
         curCar = 0;
+        myERC20 = new MyERC20("JJCoin","JJC");
         // maybe you need a constructor
     }
-
     function borrowerOf(uint256 carTokenId) public view returns(address){
         if(isBorrowed(carTokenId)){
             return cars[carTokenId].borrower;
@@ -76,8 +77,9 @@ contract BorrowYourCar{
     function isBorrowed(uint256 carTokenId) private view returns(bool){
         return cars[carTokenId].borrowUntil >= block.timestamp ? true : false;
     }
-    function borrow(uint256 carTokenId, uint256 duration) public {
+    function borrow(uint256 carTokenId, uint256 duration) public payable {
         require((!isOwner(msg.sender,carTokenId) && !isBorrowed(carTokenId)));
+        myERC20.transferFrom(msg.sender,cars[carTokenId].owner, duration);
         Car storage car = cars[carTokenId];
         car.borrower = msg.sender;
         car.borrowUntil = block.timestamp + duration;
